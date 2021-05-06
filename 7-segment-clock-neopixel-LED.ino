@@ -57,13 +57,6 @@ byte digits[10] = {
   0b1111001      // 9
 };
 
-//Clear all the Pixels
-void clearDisplay2() {
-  for (int i = 0; i < strip.numPixels(); i++) {
-    strip.setPixelColor(i, strip.Color(0, 0, 0));
-  }
-  strip.show();
-}
 
 // initiate everything
 void setup() {
@@ -96,7 +89,7 @@ void loop() {
   int hourOne = newHour / 10;
   int hourTwo = newHour % 10;
 
-  // if hours is zero then don't display
+   // if hours is zero then don't display
   Serial.print("hourOne = ");
   Serial.println(hourOne);
   Serial.print("hourTwo = ");
@@ -105,10 +98,32 @@ void loop() {
     // display LED digits
     clearDisplay2(); // clear all the pixels first
     disp_Digit1(hourOne);
+    // display LED digits 2nd hour digit.
+    disp_Digit2(hourTwo);
+  }else {
+    clearDisplay2(); // clear all the pixels first
+    // display LED digits 2nd hour digit.
+    disp_Digit2(hourTwo);
   }
-  
-  // display LED digits 2nd hour digit.
-  disp_Digit2(hourTwo);
+
+  /*
+  // for loop testing purposes ONLY
+  for (int i = 15; i > 0; i--) {
+    int a = i / 10;
+    int b = i % 10;
+    if (a != 0) {
+      // display LED digits
+      clearDisplay2(); // clear all the pixels first
+      disp_Digit1(a);
+      disp_Digit2(b);
+    }else {
+      clearDisplay2(); // clear all the pixels first
+      disp_Digit2(b);
+    }
+    delay(1000);
+    clearDisplay2();
+  }
+  */
 
   // GET AND DISPLAY MINUTES
   // get minute and split two digits into single digits
@@ -119,6 +134,13 @@ void loop() {
   disp_Digit4(minTwo);
 }
 
+//Clear all the Pixels
+void clearDisplay2() {
+  for (int i = 0; i < strip.numPixels(); i++) {
+    strip.setPixelColor(i, strip.Color(0, 0, 0));
+  }
+  strip.show();
+}
 
 // Rainbow cycle along whole strip. Pass delay time (in ms) between frames.
 void logoRainbow(int wait) {
@@ -211,18 +233,9 @@ void logoStrip() {
   //delay(1000);
 }
 
-// powers the twodots box. 2 is the number of LED's powering the branding box, and had two LEDS
-void twodots() {
-  for (int i = 0; i < TWODOT_PIXEL; i++) {
-    twodot.setPixelColor(i, 255, 255, 255);
-  }
-  twodot.show();
-  //delay(1000);
-}
-
 //display single and double digits, this is for the first digit.
 void disp_Digit1(int num) {
-  //clearDisplay();
+  clearDisplay2(); // clear all the pixels first
   writeDigit(0, num);
   strip.show();
 }
@@ -344,6 +357,20 @@ int getMinute() {
   return currentMinute;
 }
 
+// colors for the time and twodots
+int r = 60;
+int g = 179;
+int b = 113;
+
+// powers the twodots box. 2 is the number of LED's powering the branding box, and had two LEDS
+void twodots() {
+  for (int i = 0; i < TWODOT_PIXEL; i++) {
+    twodot.setPixelColor(i, r, g, b);
+  }
+  twodot.show();
+  //delay(1000);
+}
+
 // power each digit
 void writeDigit(int index, int val) {
   byte digit = digits[val];
@@ -352,16 +379,16 @@ void writeDigit(int index, int val) {
     
     uint32_t color;
     if (digit & 0x01 != 0) {
-      if (val == 1) color = strip.Color(255, 255, 255);
-      if (val == 2) color = strip.Color(255, 255, 255);
-      if (val == 3) color = strip.Color(255, 255, 255);
-      if (val == 4) color = strip.Color(255, 255, 255);
-      if (val == 5) color = strip.Color(255, 255, 255);
-      if (val == 6) color = strip.Color(255, 255, 255);
-      if (val == 7) color = strip.Color(255, 255, 255);
-      if (val == 8) color = strip.Color(255, 255, 255);
-      if (val == 9) color = strip.Color(255, 255, 255);
-      if (val == 0) color = strip.Color(255, 255, 255);
+      if (val == 1) color = strip.Color(r, g, b);
+      if (val == 2) color = strip.Color(r, g, b);
+      if (val == 3) color = strip.Color(r, g, b);
+      if (val == 4) color = strip.Color(r, g, b);
+      if (val == 5) color = strip.Color(r, g, b);
+      if (val == 6) color = strip.Color(r, g, b);
+      if (val == 7) color = strip.Color(r, g, b);
+      if (val == 8) color = strip.Color(r, g, b);
+      if (val == 9) color = strip.Color(r, g, b);
+      if (val == 0) color = strip.Color(r, g, b);
     }
     else
       color = strip.Color(0, 0, 0);
